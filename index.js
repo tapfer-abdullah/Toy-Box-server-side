@@ -52,6 +52,21 @@ async function run() {
       res.send(data);
     })
 
+    // Shop By Category 
+    app.get("/toys", async(req, res) =>{
+      const category = req.query?.category;
+      // console.log(category);
+      let query = {};
+      if(category){
+        query = {category}
+      }
+
+      const cursor = toyCollection.find(query);
+        const result = await cursor.toArray();
+        res.send(result);
+
+    })
+
     // all toys 
     app.get("/all-toys", async (req, res) => {
       const query = {};
