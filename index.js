@@ -11,15 +11,15 @@ const data = require('./data.json');
 app.use(cors());
 app.use(express.json());
 
-app.get("/", (req, res)=>{
-    res.send("Assignment 11's is running");
+app.get("/", (req, res) => {
+  res.send("Assignment 11's is running");
 })
 
 
 
 // console.log(process.env.AK_USER)
 
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const uri = `mongodb+srv://${process.env.AK_USER}:${process.env.AK_PASS}@cluster0.bna95n2.mongodb.net/?retryWrites=true&w=majority`;
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
@@ -48,24 +48,24 @@ async function run() {
     //     res.send(result);
     // })
 
-    app.get("/gallery", async(req, res)=>{
-        res.send(data);
+    app.get("/gallery", async (req, res) => {
+      res.send(data);
     })
 
     // all toys 
-    app.get("/all-toys", async(req, res)=>{
-        const query = {};
-        const cursor = toyCollection.find(query);
-        const result = await cursor.toArray();
-        res.send(result);
+    app.get("/all-toys", async (req, res) => {
+      const query = {};
+      const cursor = toyCollection.find(query);
+      const result = await cursor.toArray();
+      res.send(result);
     })
 
     //Single user myToys
-    app.get("/my-toys", async(req, res) =>{
+    app.get("/my-toys", async (req, res) => {
       let query = {};
-      
-      if(req.query?.email){
-        query = {sellerEmail: req.query.email};
+
+      if (req.query?.email) {
+        query = { sellerEmail: req.query.email };
       }
       const cursor = toyCollection.find(query);
       const result = await cursor.toArray();
@@ -74,13 +74,49 @@ async function run() {
       res.send(result);
     })
 
+    //single toy by id
+    app.get("/update/:id", async (req, res) => {
+      const id = req.params.id;
+      // console.log(id)
+
+      const query = { _id: new ObjectId(id) };
+      const result = await toyCollection.findOne(query);
+      res.send(result);
+    })
+
+    app.post("/update/:id", async (req, res) => {
+      const oldCar = req.body;
+      const id = req.params.id;
+      // console.log(oldCar)
+
+      const filter = { _id: new ObjectId(id) };
+      const options = { upsert: true };
+      const updatedCar = {
+        $set: {
+          name: oldCar.name,
+          quantity: oldCar.quantity,
+          seller: oldCar.seller,
+          sellerEmail: oldCar.sellerEmail,
+          category: oldCar.category,
+          details: oldCar.details,
+          photo: oldCar.photo,
+          price: oldCar.price,
+          rating: oldCar.rating
+        }
+      }
+
+      const result = await toyCollection.updateOne(filter, updatedCar, options);
+      res.send(result);
+    })
+
+
     // post 
-    app.post("/add-new-car", async(req, res)=>{
-        const car = req.body;
-        console.log(car);
-        const result = await toyCollection.insertOne(car);
-        console.log(result)
-        res.send(result)
+    app.post("/add-new-car", async (req, res) => {
+      const car = req.body;
+      // console.log(car);
+      const result = await toyCollection.insertOne(car);
+      // console.log(result)
+      res.send(result)
 
     })
 
@@ -98,6 +134,6 @@ run().catch(console.dir);
 
 
 
-app.listen(port, ()=>{
-    console.log("Assignment 11's server is running on port: ", port);
+app.listen(port, () => {
+  console.log("Assignment 11's server is running on port: ", port);
 })
