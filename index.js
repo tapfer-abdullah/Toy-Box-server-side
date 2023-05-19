@@ -84,6 +84,7 @@ async function run() {
       res.send(result);
     })
 
+    // update by id 
     app.post("/update/:id", async (req, res) => {
       const oldCar = req.body;
       const id = req.params.id;
@@ -109,6 +110,13 @@ async function run() {
       res.send(result);
     })
 
+    // delete a car by id 
+    app.delete("/delete/:id", async(req, res)=>{
+      const id = req.params.id;
+      // console.log(id)
+      const result = await toyCollection.deleteOne({_id: new ObjectId(id)});
+      res.send(result);
+    })
 
     // post 
     app.post("/add-new-car", async (req, res) => {
