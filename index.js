@@ -62,16 +62,26 @@ async function run() {
 
     //Single user myToys
     app.get("/my-toys", async (req, res) => {
+      const sortInfo = req.headers.sort;
+      console.log(sortInfo);
       let query = {};
 
       if (req.query?.email) {
         query = { sellerEmail: req.query.email };
       }
-      const cursor = toyCollection.find(query);
-      const result = await cursor.toArray();
-      console.log(query, result)
 
-      res.send(result);
+
+      if (sortInfo == 0) {
+        const cursor = toyCollection.find(query);
+        const result = await cursor.toArray();
+        res.send(result);
+      }
+      else {
+        const cursor = toyCollection.find(query).sort({ price: sortInfo });
+        const result = await cursor.toArray();
+        res.send(result);
+      }
+
     })
 
     //single toy by id
@@ -111,10 +121,10 @@ async function run() {
     })
 
     // delete a car by id 
-    app.delete("/delete/:id", async(req, res)=>{
+    app.delete("/delete/:id", async (req, res) => {
       const id = req.params.id;
       // console.log(id)
-      const result = await toyCollection.deleteOne({_id: new ObjectId(id)});
+      const result = await toyCollection.deleteOne({ _id: new ObjectId(id) });
       res.send(result);
     })
 
