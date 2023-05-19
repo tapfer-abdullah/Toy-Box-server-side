@@ -60,6 +60,19 @@ async function run() {
         res.send(result);
     })
 
+    //Single user myToys
+    app.get("/my-toys", async(req, res) =>{
+      let query = {};
+      
+      if(req.query?.email){
+        query = {sellerEmail: req.query.email};
+      }
+      const cursor = toyCollection.find(query);
+      const result = await cursor.toArray();
+      console.log(query, result)
+
+      res.send(result);
+    })
 
     // post 
     app.post("/add-new-car", async(req, res)=>{
