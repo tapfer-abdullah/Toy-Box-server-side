@@ -1,50 +1,14 @@
 [
     {
-        "_id": "6465f44bbb9b26b21105a6a4",
-        "img" : "https://i.ibb.co/2t6Qb9Y/super1.jpg",
-        "name": "Teddy Bear",
-        "seller-name": "John",
-        "seller-email": "john@example.com",
-        "sub-category": "Stuffed Animals",
-        "Price":"12.99",
-        "Rating": "4.5",
-        "Available-quantity":"5",
-        "Detail description": "A soft and cuddly teddy bear perfect for hugging and snuggling."
+        "img" : "https://i.ibb.co/2t6Qb9Y/super1.jpg"
     },
     {
-        "_id": "6465f44bbb9b26b21105a6a4",
-        "img" : "https://i.ibb.co/kG8PhtT/Policew2.webp",
-        "name": "Teddy Bear",
-        "seller-name": "John",
-        "seller-email": "john@example.com",
-        "sub-category": "Stuffed Animals",
-        "Price":"12.99",
-        "Rating": "4.5",
-        "Available-quantity":"5",
-        "Detail description": "A soft and cuddly teddy bear perfect for hugging and snuggling."
+        "img" : "https://i.ibb.co/kG8PhtT/Policew2.webp"
     },
     {
-        "_id": "6465f44bbb9b26b21105a6a4",
-        "img" : "https://i.ibb.co/7pHNnN3/Truck1.jpg",
-        "name": "Teddy Bear",
-        "seller-name": "John",
-        "seller-email": "john@example.com",
-        "sub-category": "Stuffed Animals",
-        "Price":"12.99",
-        "Rating": "4.5",
-        "Available-quantity":"5",
-        "Detail description": "A soft and cuddly teddy bear perfect for hugging and snuggling."
+        "img" : "https://i.ibb.co/7pHNnN3/Truck1.jpg"
     },
     {
-        "_id": "6465f44bbb9b26b21105a6a4",
-        "img" : "https://i.ibb.co/WFWYNmP/Truck2.jpg",
-        "name": "Teddy Bear",
-        "seller-name": "John",
-        "seller-email": "john@example.com",
-        "sub-category": "Stuffed Animals",
-        "Price":"12.99",
-        "Rating": "4.5",
-        "Available-quantity":"5",
-        "Detail description": "A soft and cuddly teddy bear perfect for hugging and snuggling."
+        "img" : "https://i.ibb.co/WFWYNmP/Truck2.jpg"
     }
 ]

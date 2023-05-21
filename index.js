@@ -67,16 +67,16 @@ async function run() {
     const toyGallery = client.db('myToysDB').collection("gallery");
 
     // gallery 
-    // app.get("/gallery", async(req, res)=>{
-    //     const query = {};
-    //     const cursor = toyGallery.find({});
-    //     const result = await cursor.toArray();
-    //     res.send(result);
-    // })
-
-    app.get("/gallery", async (req, res) => {
-      res.send(data);
+    app.get("/gallery", async(req, res)=>{
+        const query = {};
+        const cursor = toyGallery.find({});
+        const result = await cursor.toArray();
+        res.send(result);
     })
+
+    // app.get("/gallery", async (req, res) => {
+    //   res.send(data);
+    // })
 
     // Shop By Category 
     app.get("/toys", async(req, res) =>{
