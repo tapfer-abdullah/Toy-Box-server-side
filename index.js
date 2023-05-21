@@ -3,7 +3,8 @@ const express = require("express");
 const cors = require("cors");
 const app = express();
 const port = process.env.PORT || 5000;
-require('dotenv').config()
+require('dotenv').config();
+jwt = require('jsonwebtoken');
 
 const data = require('./data.json');
 
@@ -31,10 +32,35 @@ const client = new MongoClient(uri, {
   }
 });
 
+
+// JWT verify 
+const verifyJWT = (req, res, next) =>{
+  const authorization = req.headers.authorization;
+  // console.log(authorization)
+
+  if(!authorization){
+    return res.status(401).send({error: true, message: "Unauthorize access"});
+  }
+
+  const token = authorization.split(" ")[1];
+  // console.log(token);
+
+  jwt.verify(token, process.env.AK_ACCESS_TOKEN, (error, decoded)=>{
+    if(error){
+        res.status(403).send({error: true, message: "Unauthorize access"});
+    }
+    req.decoded = decoded;
+    next();
+  })
+  
+}
+
+
 async function run() {
   try {
     // Connect the client to the server	(optional starting in v4.7)
-    await client.connect();
+    // await client.connect();
+    client.connect();
 
 
     const toyCollection = client.db('myToysDB').collection("AllToy");
@@ -69,22 +95,48 @@ async function run() {
 
     // all toys 
     app.get("/all-toys", async (req, res) => {
-      const query = {};
-      const cursor = toyCollection.find(query);
+      const sb = req.query?.name;
+      const limit= parseInt(req.query.limit);
+      let query ={};
+      console.log(sb, limit)
+
+      if(sb){
+        query = {name: sb};
+      }
+
+      const cursor = toyCollection.find(query).limit(limit);
       const result = await cursor.toArray();
       res.send(result);
     })
 
+
+    // JWT token---------------
+    //--------------------------
+    app.post("/jsw", (req, res) =>{
+      const user = req.body;
+      console.log(user);
+
+      const token = jwt.sign(user, process.env.AK_ACCESS_TOKEN, { expiresIn: "1h" })
+      res.send({token});
+
+    })
+
+
     //Single user myToys
-    app.get("/my-toys", async (req, res) => {
+    app.get("/my-toys", verifyJWT, async (req, res) => {
+      const decoded = req.decoded;
+
+      if(decoded?.email !== req.query?.email){
+        return res.status(403).send({error: true, message: "Forbidden access"});
+      }
+
       const sortInfo = req.headers.sort;
-      console.log(sortInfo);
+      console.log(sortInfo, decoded);
       let query = {};
 
       if (req.query?.email) {
         query = { sellerEmail: req.query.email };
       }
-
 
       if (sortInfo == 0) {
         const cursor = toyCollection.find(query);
